@@ -1,10 +1,22 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { AnalysisResult } from '../types';
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Lazy initialization to prevent app crash if API key is missing
+let aiClient: GoogleGenAI | null = null;
+
+const getAI = () => {
+  if (!aiClient) {
+    // Process.env.API_KEY is replaced by Vite at build time.
+    // We add a fallback to empty string to prevent "undefined" crashes, though calls will fail gracefully.
+    const apiKey = process.env.API_KEY || "";
+    aiClient = new GoogleGenAI({ apiKey });
+  }
+  return aiClient;
+};
 
 export const analyzeTreeImage = async (base64Image: string, mimeType: string): Promise<AnalysisResult> => {
   try {
+    const ai = getAI();
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: {
@@ -74,6 +86,7 @@ export const analyzeTreeImage = async (base64Image: string, mimeType: string): P
 
 export const chatWithArborist = async (message: string, history: {role: string, content: string}[]): Promise<string> => {
   try {
+    const ai = getAI();
     const chat = ai.chats.create({
       model: 'gemini-3-flash-preview',
       config: {
