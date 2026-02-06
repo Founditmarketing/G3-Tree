@@ -6,12 +6,13 @@ interface ServiceCardProps {
   description: string;
   icon: React.ReactNode;
   metric: string;
+  onClick: () => void;
 }
 
-export const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, icon, metric }) => {
+export const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, icon, metric, onClick }) => {
   return (
-    <div className="group relative p-6 rounded-xl glass-panel hover:bg-white/5 transition-all duration-500 hover:border-opal-orange/30 overflow-hidden cursor-pointer">
-      
+    <div onClick={onClick} className="group relative p-6 rounded-xl glass-panel hover:bg-white/5 transition-all duration-500 hover:border-opal-orange/30 overflow-hidden cursor-pointer">
+
       {/* Hover Gradient Glow */}
       <div className="absolute inset-0 bg-gradient-to-br from-opal-orange/0 via-opal-orange/0 to-opal-orange/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
@@ -28,7 +29,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, ic
         <h3 className="text-xl font-bold text-white mb-2 font-display tracking-tight group-hover:text-opal-orange transition-colors">
           {title}
         </h3>
-        
+
         <p className="text-gray-400 text-sm leading-relaxed mb-6 flex-grow">
           {description}
         </p>

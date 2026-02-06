@@ -15,10 +15,13 @@ import { BootSequence } from './components/BootSequence';
 import { LocationHQ } from './components/LocationHQ';
 import { TacticalResults } from './components/TacticalResults';
 import { ArboristChat } from './components/ArboristChat';
+import { ServiceDetail } from './components/ServiceDetail';
+import { serviceData } from './services/serviceData';
 import { Axe, ShieldAlert, Sprout, ClipboardCheck, ArrowDown, Trees, Wifi, Server, Zap, AlertTriangle } from 'lucide-react';
 
 const App: React.FC = () => {
   const [view, setView] = useState<ViewState>(ViewState.HOME);
+  const [activeServiceId, setActiveServiceId] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(0);
   const [booted, setBooted] = useState(false);
   const [stormMode, setStormMode] = useState(false);
@@ -68,11 +71,11 @@ const App: React.FC = () => {
   return (
     <>
       {!booted && <BootSequence onComplete={() => setBooted(true)} />}
-      
+
       <div className={`min-h-screen font-sans text-gray-200 selection:bg-opal-orange selection:text-white opal-gradient flex flex-col pb-8 transition-opacity duration-1000 ${booted ? 'opacity-100' : 'opacity-0 h-0 overflow-hidden'}`}>
-        <NavBar 
-          currentView={view} 
-          onChangeView={setView} 
+        <NavBar
+          currentView={view}
+          onChangeView={setView}
           stormMode={stormMode}
           onToggleStormMode={() => setStormMode(!stormMode)}
         />
@@ -82,27 +85,36 @@ const App: React.FC = () => {
         <ArboristChat />
 
         <main className="pt-24 flex-grow relative z-10">
-          
+
           {/* STORM MODE BANNER */}
           {stormMode && (
             <div className="fixed top-24 left-0 right-0 z-40 bg-red-600 text-white py-1 text-center font-bold font-mono tracking-widest text-xs animate-pulse shadow-[0_0_30px_rgba(239,68,68,0.5)]">
-               !!! EMERGENCY PROTOCOLS ENGAGED - PRIORITY DISPATCH ACTIVE !!!
+              !!! EMERGENCY PROTOCOLS ENGAGED - PRIORITY DISPATCH ACTIVE !!!
             </div>
+          )}
+
+          {/* SERVICE DETAIL VIEW */}
+          {view === ViewState.SERVICE_DETAIL && activeServiceId && serviceData[activeServiceId] && (
+            <ServiceDetail
+              content={serviceData[activeServiceId]}
+              onNavigate={setView}
+              onBack={() => setView(ViewState.SERVICES)}
+            />
           )}
 
           {/* HERO SECTION - Only show on Home */}
           {view === ViewState.HOME && (
             <section className="relative min-h-[90vh] flex flex-col justify-center items-center px-4 overflow-hidden">
-              
+
               {/* Dynamic Neural Background */}
               <NeuralBackground />
-              
+
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#050505] z-0 pointer-events-none" />
 
               {/* Abstract Glow Effects */}
               <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-opal-orange/10 rounded-full blur-[100px] animate-pulse-slow pointer-events-none z-0" />
               <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-blue-900/10 rounded-full blur-[120px] pointer-events-none z-0" />
-              
+
               <div className="relative z-10 text-center max-w-5xl mx-auto space-y-8">
                 <div className="inline-block glass-panel px-4 py-1 rounded-full border border-white/10 mb-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
                   <span className={`flex items-center gap-2 text-xs font-mono tracking-[0.2em] uppercase ${stormMode ? 'text-red-500' : 'text-opal-orange'}`}>
@@ -110,17 +122,17 @@ const App: React.FC = () => {
                     {stormMode ? 'CRITICAL ALERT STATUS' : 'System Online v3.0'}
                   </span>
                 </div>
-                
+
                 <h1 className="text-5xl md:text-8xl font-display font-bold text-white tracking-tighter leading-tight text-glow">
                   {stormMode ? (
-                    <>STORM RESPONSE <br/><span className="text-red-500">UNIT DEPLOYED</span></>
+                    <>STORM RESPONSE <br /><span className="text-red-500">UNIT DEPLOYED</span></>
                   ) : (
-                    <>PRECISION <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-400 to-gray-600">IS OUR NATURE.</span></>
+                    <>PRECISION <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-400 to-gray-600">IS OUR NATURE.</span></>
                   )}
                 </h1>
-                
+
                 <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto font-light leading-relaxed">
-                  {stormMode 
+                  {stormMode
                     ? "Heavy operations fleet mobilized for emergency clearance. Hazardous removals and infrastructure protection are currently prioritized."
                     : "G3 Tree combines biological expertise with industrial precision. We provide data-driven tree care services for clients who demand excellence."
                   }
@@ -128,7 +140,7 @@ const App: React.FC = () => {
 
                 <div className="flex flex-col md:flex-row items-center justify-center gap-4 mt-8">
                   {stormMode ? (
-                    <button 
+                    <button
                       onClick={() => setView(ViewState.CONTACT)}
                       className="px-8 py-4 bg-red-600 text-white rounded-full font-bold text-lg hover:bg-white hover:text-red-600 transition-all duration-300 shadow-[0_0_30px_rgba(239,68,68,0.6)] animate-pulse"
                     >
@@ -136,13 +148,13 @@ const App: React.FC = () => {
                     </button>
                   ) : (
                     <>
-                      <button 
+                      <button
                         onClick={() => setView(ViewState.ANALYZER)}
                         className="px-8 py-4 bg-opal-orange text-white rounded-full font-bold text-lg hover:bg-white hover:text-black transition-all duration-300 shadow-[0_0_30px_rgba(255,87,34,0.4)] hover:shadow-[0_0_50px_rgba(255,255,255,0.4)]"
                       >
                         AI Tree Analysis
                       </button>
-                      <button 
+                      <button
                         onClick={() => setView(ViewState.SERVICES)}
                         className="px-8 py-4 glass-panel border border-white/20 text-white rounded-full font-medium text-lg hover:bg-white/10 transition-all duration-300"
                       >
@@ -161,7 +173,7 @@ const App: React.FC = () => {
 
           {/* DYNAMIC CONTENT AREA */}
           <div className="max-w-7xl mx-auto px-6">
-            
+
             {/* STATS SECTION (COMMAND DECK) */}
             {(view === ViewState.HOME) && (
               <StatsSection />
@@ -171,7 +183,7 @@ const App: React.FC = () => {
             {(view === ViewState.HOME || view === ViewState.SERVICES) && (
               <ProcessTimeline />
             )}
-            
+
             {/* TACTICAL RESULTS (New) - Only Home or Services */}
             {(view === ViewState.HOME || view === ViewState.SERVICES) && (
               <TacticalResults />
@@ -204,7 +216,19 @@ const App: React.FC = () => {
                 )}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   {services.map((s, i) => (
-                    <ServiceCard key={i} {...s} />
+                    <ServiceCard
+                      key={i}
+                      {...s}
+                      onClick={() => {
+                        // Map title to ID (simple slugify for now since we don't have IDs in the services array yet)
+                        const slug = s.title.toLowerCase().replace(/\s+/g, '-');
+                        if (serviceData[slug]) {
+                          setActiveServiceId(slug);
+                          setView(ViewState.SERVICE_DETAIL);
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }
+                      }}
+                    />
                   ))}
                 </div>
               </div>
@@ -232,8 +256,8 @@ const App: React.FC = () => {
               <div className="py-24 scroll-mt-24" id="contact">
                 {view === ViewState.CONTACT && (
                   <div className="text-center mb-16">
-                      <h2 className="text-4xl md:text-6xl font-display font-bold text-white mb-6">Let's Talk Trees</h2>
-                      <p className="text-gray-400">Professional assessments for residential and commercial assets.</p>
+                    <h2 className="text-4xl md:text-6xl font-display font-bold text-white mb-6">Let's Talk Trees</h2>
+                    <p className="text-gray-400">Professional assessments for residential and commercial assets.</p>
                   </div>
                 )}
                 {view === ViewState.HOME && (
@@ -252,7 +276,7 @@ const App: React.FC = () => {
         <footer className="border-t border-white/5 bg-[#030303] py-8 mb-4">
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex flex-col md:flex-row justify-between items-center text-xs font-mono text-gray-600 gap-4 md:gap-0">
-              
+
               {/* Left: Brand & Copy */}
               <div className="flex items-center space-x-4">
                 <span className="text-white font-bold">G3<span className="text-opal-orange">TREE</span></span>
@@ -263,16 +287,16 @@ const App: React.FC = () => {
               {/* Center: System Status Indicators */}
               <div className="flex items-center space-x-6">
                 <div className="flex items-center space-x-2">
-                    <Wifi size={14} className="text-green-500" />
-                    <span>NETWORK: SECURE</span>
+                  <Wifi size={14} className="text-green-500" />
+                  <span>NETWORK: SECURE</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                    <Server size={14} className="text-opal-accent" />
-                    <span>DISPATCH: ONLINE</span>
+                  <Server size={14} className="text-opal-accent" />
+                  <span>DISPATCH: ONLINE</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                    <Zap size={14} className="text-opal-orange" />
-                    <span>GRID: STABLE</span>
+                  <Zap size={14} className="text-opal-orange" />
+                  <span>GRID: STABLE</span>
                 </div>
               </div>
 
