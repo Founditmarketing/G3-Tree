@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { ViewState } from '../types';
-import { Menu, X, Activity, Trees, Phone, Home, MapPin, AlertCircle } from 'lucide-react';
+import { Menu, X, Activity, Trees, Phone, Home, MapPin, AlertCircle, ChevronDown, ChevronRight, Star, Camera } from 'lucide-react';
+import { serviceData } from '../services/serviceData';
 
 interface NavBarProps {
   currentView: ViewState;
   onChangeView: (view: ViewState) => void;
   stormMode: boolean;
   onToggleStormMode: () => void;
+  onSelectService?: (id: string) => void;
 }
 
-export const NavBar: React.FC<NavBarProps> = ({ currentView, onChangeView, stormMode, onToggleStormMode }) => {
+export const NavBar: React.FC<NavBarProps> = ({ currentView, onChangeView, stormMode, onToggleStormMode, onSelectService }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const NavItem = ({ view, label, icon: Icon }: { view: ViewState; label: string; icon: any }) => (
@@ -46,8 +48,45 @@ export const NavBar: React.FC<NavBarProps> = ({ currentView, onChangeView, storm
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center space-x-2">
             <NavItem view={ViewState.HOME} label="Home" icon={Home} />
-            <NavItem view={ViewState.SERVICES} label="Services" icon={Trees} />
+            
+            {/* Services Dropdown */}
+            <div className="relative group">
+              <button
+                onClick={() => {
+                  onChangeView(ViewState.HOME);
+                  setTimeout(() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' }), 50);
+                }}
+                className={`flex items-center space-x-1 px-4 py-2 rounded-full transition-all duration-300 font-display tracking-wide
+                  ${currentView === ViewState.SERVICES || currentView === ViewState.SERVICE_DETAIL 
+                    ? 'bg-opal-orange text-white shadow-[0_0_15px_rgba(255,87,34,0.4)] border border-opal-orange' 
+                    : 'text-gray-400 hover:text-white hover:bg-white/5 border border-transparent'}`}
+              >
+                <Trees size={16} className="mr-1" />
+                <span>Services</span>
+                <ChevronDown size={14} className="opacity-70 group-hover:rotate-180 transition-transform duration-300" />
+              </button>
+              
+              <div className="absolute top-full left-0 mt-2 w-72 glass-panel border border-white/10 rounded-xl p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top shadow-2xl z-50">
+                {Object.values(serviceData).map((service) => (
+                  <button
+                    key={service.id}
+                    onClick={() => {
+                      if (onSelectService) {
+                        onSelectService(service.id);
+                        setIsOpen(false);
+                      }
+                    }}
+                    className="w-full text-left flex items-center justify-between px-4 py-3 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors group/item"
+                  >
+                    <span className="font-medium tracking-wide">{service.title}</span>
+                    <ChevronRight size={14} className="opacity-0 group-hover/item:opacity-100 group-hover/item:translate-x-1 transition-all text-opal-orange" />
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <NavItem view={ViewState.LOCATION} label="HQ / Map" icon={MapPin} />
+            <NavItem view={ViewState.GALLERY} label="Gallery" icon={Camera} />
             <NavItem view={ViewState.ANALYZER} label="AI Diagnostic" icon={Activity} />
             <NavItem view={ViewState.CONTACT} label="Contact" icon={Phone} />
           </div>
@@ -79,8 +118,41 @@ export const NavBar: React.FC<NavBarProps> = ({ currentView, onChangeView, storm
         {isOpen && (
           <div className="mt-2 glass-panel rounded-2xl p-4 md:hidden flex flex-col space-y-2 animate-in slide-in-from-top-4 fade-in duration-200">
              <NavItem view={ViewState.HOME} label="Home" icon={Home} />
-            <NavItem view={ViewState.SERVICES} label="Services" icon={Trees} />
+            <div className="flex flex-col space-y-1">
+              <button
+                onClick={() => {
+                  onChangeView(ViewState.HOME);
+                  setIsOpen(false);
+                  setTimeout(() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' }), 50);
+                }}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-300 font-display tracking-wide
+                  ${currentView === ViewState.SERVICES || currentView === ViewState.SERVICE_DETAIL 
+                    ? 'bg-opal-orange text-white' 
+                    : 'text-gray-400 hover:text-white'}`}
+              >
+                <Trees size={16} />
+                <span>Services Overview</span>
+              </button>
+              <div className="pl-6 flex flex-col space-y-1 mt-1 border-l-2 border-white/5 ml-4">
+                {Object.values(serviceData).map((service) => (
+                  <button
+                    key={service.id}
+                    onClick={() => {
+                      if (onSelectService) {
+                        onSelectService(service.id);
+                        setIsOpen(false);
+                      }
+                    }}
+                    className="text-left flex justify-between items-center px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                  >
+                    {service.title}
+                    <ChevronRight size={14} className="opacity-50" />
+                  </button>
+                ))}
+              </div>
+            </div>
             <NavItem view={ViewState.LOCATION} label="HQ / Map" icon={MapPin} />
+            <NavItem view={ViewState.GALLERY} label="Gallery" icon={Camera} />
             <NavItem view={ViewState.ANALYZER} label="AI Diagnostic" icon={Activity} />
             <NavItem view={ViewState.CONTACT} label="Contact" icon={Phone} />
             <button 

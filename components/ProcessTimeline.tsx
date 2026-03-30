@@ -30,8 +30,14 @@ const steps = [
 
 export const ProcessTimeline: React.FC = () => {
   return (
-    <div className="py-24 relative">
-       <div className="max-w-7xl mx-auto px-6">
+    <div 
+      className="py-24 relative bg-cover bg-center"
+      style={{ backgroundImage: `url('/services-bkg.jpg')` }}
+    >
+      {/* Dark gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/70 to-black/90 z-0 pointer-events-none"></div>
+
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-4">Operational Protocol</h2>
           <p className="text-gray-400">Our standardized workflow ensures zero-error execution.</p>

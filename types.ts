@@ -23,7 +23,8 @@ export enum ViewState {
   SERVICES = 'SERVICES',
   CONTACT = 'CONTACT',
   LOCATION = 'LOCATION',
-  SERVICE_DETAIL = 'SERVICE_DETAIL'
+  SERVICE_DETAIL = 'SERVICE_DETAIL',
+  GALLERY = 'GALLERY'
 }
 
 export interface FAQItem {

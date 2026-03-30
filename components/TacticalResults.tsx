@@ -8,8 +8,8 @@ export const TacticalResults: React.FC = () => {
 
   // Using placeholders that represent "Chaos/Damage" vs "Order/Safety"
   // Since we don't have real assets, we use styled placeholders
-  const beforeImage = "https://images.unsplash.com/photo-1518105570919-e342af1a8256?q=80&w=2574&auto=format&fit=crop"; // Stormy/Dark forest vibe
-  const afterImage = "https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2674&auto=format&fit=crop"; // Clean, green forest vibe
+  const beforeImage = "/g3-before.jpg"; // Stormy/Dark forest vibe
+  const afterImage = "/g3-after.jpg"; // Clean, green forest vibe
 
   const handleMove = (clientX: number) => {
     if (!containerRef.current) return;

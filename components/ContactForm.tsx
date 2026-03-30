@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, Radio, CheckCircle, Loader2 } from 'lucide-react';
+import { Send, Radio, CheckCircle, Loader2, PhoneCall, Mail, MapPin } from 'lucide-react';
 
 export const ContactForm: React.FC = () => {
   const [ticketId] = useState(`G3-${Math.floor(Math.random() * 9000) + 1000}`);
@@ -48,6 +48,31 @@ export const ContactForm: React.FC = () => {
           </div>
           <div className="mt-4 md:mt-0 font-mono text-opal-orange text-sm bg-opal-orange/10 px-3 py-1 rounded border border-opal-orange/20">
              ID: {ticketId}
+          </div>
+        </div>
+
+        {/* Direct Contact Info */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div className="flex items-center space-x-3 bg-white/5 p-4 rounded-xl border border-white/10">
+            <PhoneCall className="text-opal-orange shrink-0" size={20} />
+            <div>
+              <div className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Direct Line</div>
+              <a href="tel:912-614-4047" className="text-white hover:text-opal-orange transition-colors whitespace-nowrap">912.614.4047</a>
+            </div>
+          </div>
+          <div className="flex items-center space-x-3 bg-white/5 p-4 rounded-xl border border-white/10">
+            <Mail className="text-opal-orange shrink-0" size={20} />
+            <div className="truncate">
+              <div className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Email Dispatch</div>
+              <a href="mailto:sales@g3tree.com" className="text-white hover:text-opal-orange transition-colors text-sm truncate block">sales@g3tree.com</a>
+            </div>
+          </div>
+          <div className="flex items-center space-x-3 bg-white/5 p-4 rounded-xl border border-white/10">
+            <MapPin className="text-opal-orange shrink-0" size={20} />
+            <div>
+              <div className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Headquarters</div>
+              <div className="text-white text-xs md:text-sm">4782 Alma Hwy, Waycross, GA 31503</div>
+            </div>
           </div>
         </div>
 

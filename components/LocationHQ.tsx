@@ -195,9 +195,14 @@ export const LocationHQ: React.FC = () => {
            </div>
            
            <div className="mt-8 text-center">
-              <button className="bg-white/5 border border-white/20 hover:bg-white hover:text-black text-white px-8 py-3 rounded-full font-bold font-display transition-all uppercase tracking-wider text-sm">
+              <a 
+                href="https://www.google.com/maps/place/G3+Tree+Care+LLC/data=!4m2!3m1!1s0x0:0xe6cb0a9346dd19?sa=X&ved=1t:2428&ictx=111" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-block bg-white/5 border border-white/20 hover:bg-white hover:text-black text-white px-8 py-3 rounded-full font-bold font-display transition-all uppercase tracking-wider text-sm"
+              >
                  Rate Us on Google
-              </button>
+              </a>
            </div>
         </div>
 

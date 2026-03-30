@@ -16,6 +16,8 @@ import { LocationHQ } from './components/LocationHQ';
 import { TacticalResults } from './components/TacticalResults';
 import { ArboristChat } from './components/ArboristChat';
 import { ServiceDetail } from './components/ServiceDetail';
+import { ReviewsSlider } from './components/ReviewsSlider';
+import { Gallery } from './components/Gallery';
 import { serviceData } from './services/serviceData';
 import { Axe, ShieldAlert, Sprout, ClipboardCheck, ArrowDown, Trees, Wifi, Server, Zap, AlertTriangle } from 'lucide-react';
 
@@ -78,6 +80,11 @@ const App: React.FC = () => {
           onChangeView={setView}
           stormMode={stormMode}
           onToggleStormMode={() => setStormMode(!stormMode)}
+          onSelectService={(id) => {
+            setActiveServiceId(id);
+            setView(ViewState.SERVICE_DETAIL);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
         />
         <SystemTicker />
 
@@ -155,7 +162,7 @@ const App: React.FC = () => {
                         AI Tree Analysis
                       </button>
                       <button
-                        onClick={() => setView(ViewState.SERVICES)}
+                        onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
                         className="px-8 py-4 glass-panel border border-white/20 text-white rounded-full font-medium text-lg hover:bg-white/10 transition-all duration-300"
                       >
                         View Services
@@ -201,37 +208,50 @@ const App: React.FC = () => {
 
             {/* SERVICES GRID */}
             {(view === ViewState.HOME || view === ViewState.SERVICES) && (
-              <div className="py-24">
-                {view === ViewState.SERVICES && (
-                  <div className="mb-12">
-                    <h2 className="text-4xl font-display font-bold text-white mb-4">Operational Directives</h2>
-                    <div className="h-1 w-20 bg-opal-orange"></div>
+              <div 
+                id="services"
+                className="py-24 relative bg-cover bg-center rounded-3xl overflow-hidden my-8"
+                style={{ backgroundImage: `url('/services-bkg-2.jpg')` }}
+              >
+                {/* Dark gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/70 to-black/85 z-0 pointer-events-none"></div>
+
+                <div className="relative z-10 px-6 md:px-12">
+                  {view === ViewState.SERVICES && (
+                    <div className="mb-12">
+                      <h2 className="text-4xl font-display font-bold text-white mb-4">Operational Directives</h2>
+                      <div className="h-1 w-20 bg-opal-orange"></div>
+                    </div>
+                  )}
+                  {view === ViewState.HOME && (
+                    <div className="flex justify-between items-end mb-12">
+                      <h2 className="text-3xl md:text-4xl font-display font-bold text-white">Services</h2>
+                    </div>
+                  )}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {services.map((s, i) => (
+                      <ServiceCard
+                        key={i}
+                        {...s}
+                        onClick={() => {
+                          // Map title to ID (simple slugify for now since we don't have IDs in the services array yet)
+                          const slug = s.title.toLowerCase().replace(/\s+/g, '-');
+                          if (serviceData[slug]) {
+                            setActiveServiceId(slug);
+                            setView(ViewState.SERVICE_DETAIL);
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }
+                        }}
+                      />
+                    ))}
                   </div>
-                )}
-                {view === ViewState.HOME && (
-                  <div className="flex justify-between items-end mb-12">
-                    <h2 className="text-3xl md:text-4xl font-display font-bold text-white">Core Protocols</h2>
-                    <button onClick={() => setView(ViewState.SERVICES)} className="hidden md:block text-sm text-opal-orange hover:text-white transition-colors">View All Services →</button>
-                  </div>
-                )}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {services.map((s, i) => (
-                    <ServiceCard
-                      key={i}
-                      {...s}
-                      onClick={() => {
-                        // Map title to ID (simple slugify for now since we don't have IDs in the services array yet)
-                        const slug = s.title.toLowerCase().replace(/\s+/g, '-');
-                        if (serviceData[slug]) {
-                          setActiveServiceId(slug);
-                          setView(ViewState.SERVICE_DETAIL);
-                          window.scrollTo({ top: 0, behavior: 'smooth' });
-                        }
-                      }}
-                    />
-                  ))}
                 </div>
               </div>
+            )}
+
+            {/* REVIEWS SLIDER */}
+            {view === ViewState.HOME && (
+              <ReviewsSlider />
             )}
 
             {/* ANALYZER VIEW */}
@@ -246,10 +266,11 @@ const App: React.FC = () => {
               <LocationHQ />
             )}
 
-            {/* MISSION LOG */}
-            {(view === ViewState.HOME) && (
-              <MissionLog />
+            {/* GALLERY VIEW */}
+            {view === ViewState.GALLERY && (
+              <Gallery />
             )}
+
 
             {/* CONTACT VIEW */}
             {(view === ViewState.CONTACT || view === ViewState.HOME) && (
@@ -302,8 +323,7 @@ const App: React.FC = () => {
 
               {/* Right: Connect Links */}
               <div className="flex items-center space-x-6">
-                <a href="#" className="hover:text-white transition-colors">INSTAGRAM</a>
-                <a href="#" className="hover:text-white transition-colors">LINKEDIN</a>
+                <a href="https://www.facebook.com/people/G3-Tree-Care-LLC/100087658114588/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors text-opal-orange">FACEBOOK</a>
                 <a href="#" className="hover:text-white transition-colors">PRIVACY</a>
               </div>
 
