@@ -2,12 +2,18 @@ import React, { useState } from 'react';
 import { Camera, Maximize2, X } from 'lucide-react';
 
 const galleryImages = [
-  { src: '/g3-removal.png', title: 'Heavy Crane Removal', category: 'Hazard Removal' },
-  { src: '/g3-gallery.png', title: 'Precision Canopy Pruning', category: 'Structural' },
-  { src: '/g3-gallery-1.png', title: 'Site Restoration', category: 'Clean-up' },
-  { src: '/g3-gallery-3.png', title: 'Storm Damage Recovery', category: 'Emergency' },
-  { src: '/g3-stump-removal.png', title: 'Deep Grinding Ops', category: 'Subsurface' },
-  { src: '/g3-stump.jpg', title: 'Grinding Equipment', category: 'Fleet Arsenal' }
+  { src: '/gallery-1.jpg', title: 'Operations Gallery', category: 'G3 Tree Care' },
+  { src: '/gallery-2.jpg', title: 'Operations Gallery', category: 'G3 Tree Care' },
+  { src: '/gallery-3.jpg', title: 'Operations Gallery', category: 'G3 Tree Care' },
+  { src: '/gallery-4.jpg', title: 'Operations Gallery', category: 'G3 Tree Care' },
+  { src: '/gallery-5.jpg', title: 'Operations Gallery', category: 'G3 Tree Care' },
+  { src: '/gallery-6.jpg', title: 'Operations Gallery', category: 'G3 Tree Care' },
+  { src: '/gallery-7.jpg', title: 'Operations Gallery', category: 'G3 Tree Care' },
+  { src: '/gallery-8.jpg', title: 'Operations Gallery', category: 'G3 Tree Care' },
+  { src: '/gallery-9.jpg', title: 'Operations Gallery', category: 'G3 Tree Care' },
+  { src: '/gallery-10.jpg', title: 'Operations Gallery', category: 'G3 Tree Care' },
+  { src: '/gallery-11.jpg', title: 'Operations Gallery', category: 'G3 Tree Care' },
+  { src: '/gallery-12.jpg', title: 'Operations Gallery', category: 'G3 Tree Care' }
 ];
 
 export const Gallery: React.FC = () => {
